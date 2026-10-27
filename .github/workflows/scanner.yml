@@ -1,0 +1,28 @@
+name: Momentum Scanner
+
+on:
+  schedule:
+    # UTC. 03:15 UTC = 08:45 AM IST, Mon-Fri
+    - cron: "15 3 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: momentum-scanner
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run scanner
+        env:
+          UPSTOX_ACCESS_TOKEN: ${{ secrets.UPSTOX_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -u scanner.py
