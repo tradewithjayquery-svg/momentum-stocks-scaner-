@@ -2,7 +2,6 @@ name: Momentum Scanner
 
 on:
   schedule:
-    # UTC. 03:15 UTC = 08:45 AM IST, Mon-Fri
     - cron: "15 3 * * 1-5"
   workflow_dispatch:
 
